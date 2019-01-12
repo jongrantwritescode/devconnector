@@ -1,3 +1,4 @@
 module.exports = {
-  mongoURI: "mongodb://jon:DCDBlvst58!@ds123173.mlab.com:23173/jgwcdevconnector"
+  mongoURI: "mongodb://jon:JGdcdb_01@ds123173.mlab.com:23173/jgwcdevconnector",
+  secret: "sxotylrqmcniGaspetcdfvhhifktqjfoddqwyx8cfTv3rgbrhs"
 };
