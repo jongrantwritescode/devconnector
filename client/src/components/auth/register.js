@@ -8,7 +8,7 @@ class Register extends Component {
       name: "",
       email: "",
       password: "",
-      passwordConfim: "",
+      passwordConfirm: "",
       errors: {}
     };
 
@@ -27,11 +27,11 @@ class Register extends Component {
       name: this.state.name,
       email: this.state.email,
       password: this.state.password,
-      passwordConfim: this.state.passwordConfim
+      passwordConfirm: this.state.passwordConfirm
     };
 
     axios
-      .post("api/users/register", newUser)
+      .post("/api/users/register", newUser)
       .then(res => console.log(res.data))
       .catch(err => {
         this.setState({ errors: err.response.data });
@@ -39,8 +39,6 @@ class Register extends Component {
   };
 
   render() {
-    const { errors } = this.state;
-
     return (
       <div className="register">
         <div className="container">
@@ -50,14 +48,15 @@ class Register extends Component {
               <p className="lead text-center">
                 Create your DevConnector account
               </p>
-              <form action="create-profile.html">
+              <form onSubmit={this.onSubmit}>
                 <div className="form-group">
                   <input
                     type="text"
                     className="form-control form-control-lg"
                     placeholder="Name"
                     name="name"
-                    required
+                    value={this.state.name}
+                    onChange={this.onChange}
                   />
                 </div>
                 <div className="form-group">
@@ -66,6 +65,8 @@ class Register extends Component {
                     className="form-control form-control-lg"
                     placeholder="Email Address"
                     name="email"
+                    value={this.state.email}
+                    onChange={this.onChange}
                   />
                   <small className="form-text text-muted">
                     This site uses Gravatar so if you want a profile image, use
@@ -78,6 +79,8 @@ class Register extends Component {
                     className="form-control form-control-lg"
                     placeholder="Password"
                     name="password"
+                    value={this.state.password}
+                    onChange={this.onChange}
                   />
                 </div>
                 <div className="form-group">
@@ -85,7 +88,9 @@ class Register extends Component {
                     type="password"
                     className="form-control form-control-lg"
                     placeholder="Confirm Password"
-                    name="password2"
+                    name="passwordConfirm"
+                    value={this.state.passwordConfirm}
+                    onChange={this.onChange}
                   />
                 </div>
                 <input type="submit" className="btn btn-info btn-block mt-4" />
