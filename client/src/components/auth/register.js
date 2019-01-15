@@ -1,10 +1,5 @@
 import React, { Component } from "react";
 import axios from "axios";
-import PropTypes from "prop-types";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
-import { registerUser } from "../../actions/authActions";
-import TextFieldGroup from "../common/TextFieldGroup";
 
 class Register extends Component {
   constructor() {
@@ -19,18 +14,6 @@ class Register extends Component {
 
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-  }
-
-  componentDidMount() {
-    if (this.props.auth.isAuthenticated) {
-      this.props.history.push("/dashboard");
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.errors) {
-      this.setState({ errors: nextProps.errors });
-    }
   }
 
   onChange = e => {
@@ -50,7 +33,9 @@ class Register extends Component {
     axios
       .post("api/users/register", newUser)
       .then(res => console.log(res.data))
-      .catch(err => console.log(err.response.data));
+      .catch(err => {
+        this.setState({ errors: err.response.data });
+      });
   };
 
   render() {
@@ -65,39 +50,44 @@ class Register extends Component {
               <p className="lead text-center">
                 Create your DevConnector account
               </p>
-              <form noValidate onSubmit={this.onSubmit}>
-                <TextFieldGroup
-                  placeholder="Name"
-                  name="name"
-                  value={this.state.name}
-                  onChange={this.onChange}
-                  error={errors.name}
-                />
-                <TextFieldGroup
-                  placeholder="Email"
-                  name="email"
-                  type="email"
-                  value={this.state.email}
-                  onChange={this.onChange}
-                  error={errors.email}
-                  info="This site uses Gravatar so if you want a profile image, use a Gravatar email"
-                />
-                <TextFieldGroup
-                  placeholder="Password"
-                  name="password"
-                  type="password"
-                  value={this.state.password}
-                  onChange={this.onChange}
-                  error={errors.password}
-                />
-                <TextFieldGroup
-                  placeholder="Confirm Password"
-                  name="passwordConfim"
-                  type="password"
-                  value={this.state.passwordConfim}
-                  onChange={this.onChange}
-                  error={errors.passwordConfim}
-                />
+              <form action="create-profile.html">
+                <div className="form-group">
+                  <input
+                    type="text"
+                    className="form-control form-control-lg"
+                    placeholder="Name"
+                    name="name"
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <input
+                    type="email"
+                    className="form-control form-control-lg"
+                    placeholder="Email Address"
+                    name="email"
+                  />
+                  <small className="form-text text-muted">
+                    This site uses Gravatar so if you want a profile image, use
+                    a Gravatar email
+                  </small>
+                </div>
+                <div className="form-group">
+                  <input
+                    type="password"
+                    className="form-control form-control-lg"
+                    placeholder="Password"
+                    name="password"
+                  />
+                </div>
+                <div className="form-group">
+                  <input
+                    type="password"
+                    className="form-control form-control-lg"
+                    placeholder="Confirm Password"
+                    name="password2"
+                  />
+                </div>
                 <input type="submit" className="btn btn-info btn-block mt-4" />
               </form>
             </div>
@@ -108,18 +98,4 @@ class Register extends Component {
   }
 }
 
-Register.propTypes = {
-  registerUser: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired,
-  errors: PropTypes.object.isRequired
-};
-
-const mapStateToProps = state => ({
-  auth: state.auth,
-  errors: state.errors
-});
-
-export default connect(
-  mapStateToProps,
-  { registerUser }
-)(withRouter(Register));
+export default Register;
