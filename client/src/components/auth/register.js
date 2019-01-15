@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import classnames from "classnames";
 
 class Register extends Component {
   constructor() {
@@ -39,6 +40,8 @@ class Register extends Component {
   };
 
   render() {
+    const { errors } = this.state;
+
     return (
       <div className="register">
         <div className="container">
@@ -52,7 +55,9 @@ class Register extends Component {
                 <div className="form-group">
                   <input
                     type="text"
-                    className="form-control form-control-lg"
+                    className={classnames("form-control form-control-lg", {
+                      "is-invalid": errors.name
+                    })}
                     placeholder="Name"
                     name="name"
                     value={this.state.name}
@@ -62,7 +67,9 @@ class Register extends Component {
                 <div className="form-group">
                   <input
                     type="email"
-                    className="form-control form-control-lg"
+                    className={classnames("form-control form-control-lg", {
+                      "is-invalid": errors.email
+                    })}
                     placeholder="Email Address"
                     name="email"
                     value={this.state.email}
@@ -76,7 +83,9 @@ class Register extends Component {
                 <div className="form-group">
                   <input
                     type="password"
-                    className="form-control form-control-lg"
+                    className={classnames("form-control form-control-lg", {
+                      "is-invalid": errors.password
+                    })}
                     placeholder="Password"
                     name="password"
                     value={this.state.password}
@@ -86,7 +95,9 @@ class Register extends Component {
                 <div className="form-group">
                   <input
                     type="password"
-                    className="form-control form-control-lg"
+                    className={classnames("form-control form-control-lg", {
+                      "is-invalid": errors.passwordConfirm
+                    })}
                     placeholder="Confirm Password"
                     name="passwordConfirm"
                     value={this.state.passwordConfirm}
