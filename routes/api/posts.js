@@ -55,7 +55,7 @@ router.delete(
   }
 );
 
-// @route   POST api/posts/like:id
+// @route   POST api/posts/like/:id
 // @desc    Like single post
 // @access  Private
 router.post(
@@ -79,11 +79,11 @@ router.post(
   }
 );
 
-// @route   POST api/posts/unlike:id
+// @route   POST api/posts/unlike/:id
 // @desc    Remove like from a single post
 // @access  Private
 router.post(
-  "/like/:id",
+  "/unlike/:id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Profile.findOne({ user: req.user.id }).then(profile => {
@@ -91,7 +91,7 @@ router.post(
       Post.findById(req.params.id)
         .then(post => {
           if (post.likes.some(like => like.user.toString())) {
-            var removeIndex = post.likes.findIndex({ user: req.user.id });
+            let removeIndex = post.likes.findIndex({ user: req.user.id });
             post.likes.splice(removeIndex, 1);
             post.save().then(post => res.json(post));
           } else {
@@ -130,4 +130,50 @@ router.post(
   }
 );
 
+// @route   DELETTE api/posts/comment/:id/:comment_id
+// @desc    Add comment to post
+// @access  Private
+router.delete(
+  "/comment/:id/:comment_id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Post.findById(req.params.id)
+      .then(post => {
+        let removeIndex = posts.comment.findIndex(
+          comment => comment._id.toString() === req.params.comment
+        );
+
+        if (removeIndex >= 0) {
+          post.comments.splice(removeIndex, 1);
+          post.save().then(post => res.json(post));
+        } else {
+          res.status(404).json({ postnotfound: "Post Not Found" });
+        }
+      })
+      .catch(err => res.status(404).json({ postnotfound: "Post Not Found" }));
+  }
+);
+
+// @route   DELETE api/posts/comment/:id
+// @desc    Add comment to post
+// @access  Private
+router.delete(
+  "/comment/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Post.findById(req.params.id)
+      .then(post => {
+        const newComment = {
+          text: req.body.text,
+          name: req.body.name,
+          avatar: req.body.avatar,
+          user: req.user.id
+        };
+
+        post.comments.unshift(newComment);
+        post.save().then(post => res.json(post));
+      })
+      .catch(err => res.status(404).json({ postnotfound: "Post Not Found" }));
+  }
+);
 module.exports = router;
